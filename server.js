@@ -12,8 +12,6 @@ app.use(cors());
 app.get('/', (req, res) => {
   const { url } = req.query;
 
-  console.log(url);
-
   function onPageLoad(err, response) {
     if (err || !response.text) {
       return res.status(500).send(err || 'no response text');
