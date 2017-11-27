@@ -20,7 +20,59 @@ var _superagent = require('superagent');
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _dotenv = require('dotenv');
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+if (process.env.NODE_ENV !== 'production') {
+  _dotenv2.default.load();
+}
+
+/* MONGO */
+var mongoURI = process.env.MONGO_URL;
+_mongoose2.default.connect(mongoURI);
+var db = _mongoose2.default.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  // we're connected!
+  console.log('connected');
+});
+
+_mongoose2.default.Promise = global.Promise;
+
+var gameSchema = _mongoose2.default.Schema({
+  setID: String,
+  number: Number,
+  player1: String,
+  player1Character: String,
+  player2: String,
+  player2Character: String,
+  winner: String,
+  loser: String,
+  stage: String
+});
+var Game = _mongoose2.default.model('Game', gameSchema);
+
+var setSchema = _mongoose2.default.Schema({
+  id: String,
+  roundText: String,
+  player1: String,
+  player1ID: String,
+  player2: String,
+  player2ID: String,
+  winner: String,
+  winnerID: String,
+  loser: String,
+  loserID: String
+});
+var Set = _mongoose2.default.model('Set', setSchema);
+/* END MONGO */
 
 var app = (0, _express2.default)();
 app.use(_bodyParser2.default.json()); // for parsing application/json
